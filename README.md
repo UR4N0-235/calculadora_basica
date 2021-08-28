@@ -1,5 +1,5 @@
 # calculadora_basica
-calculadora basica feita em html, css e javascript.
+calculadora basica feita em html, css e javascript, tudo em um arquivo só que nem coracao de mãe S2. 
 
 # ta sem o 0
 sim eu vi que eu esqueci de adicionar o 0....
