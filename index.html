@@ -1,0 +1,164 @@
+<html>
+
+<head>
+
+  <title>sci_Calculadora</title> <!-- Titulo do projeto-->
+
+
+  <style> /* Definindo o css da pagina */
+    #calc {
+      text-align: center;
+      width: 200px;
+      height: 300px;
+      display: grid; /* fomatacao a pagina com as grids */
+    }
+
+    #display {
+      width: 100%;
+      height: 60px;
+      margin: 10 0px;
+      font-size: 24px;
+      font-weight: bold;
+      border: 1px solid black;
+      border-radius: 10px;
+
+      grid-column: 1/12;
+    }
+
+    .numero {
+      background: #D8CCCC;
+      width: 50px;
+      height: 50px;
+      text-align: center;
+      vertical-align: middle;
+      font-size: 24px;
+      font-weight: bold;
+      border-radius: 10px;
+      margin: 1px;
+      border: 1px solid white;
+      line-height: 50px;
+      border: 1px solid black;
+    }
+    .separadores{
+      width: 100%;
+      display: grid;
+      grid-template-column: 1.5fr 1.5fr 1.5fr 1.5fr;
+    }
+
+    .numero:hover {
+      cursor: pointer;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div id="calc"> <!-- div definida para uso da formatacao em grid -->
+
+
+    <div id="display"> <!-- inicio do visor calculadora -->
+      <span id="expressao"> </span> <!-- parte da expressao da calculadora, o valor que aparece antes do = -->
+      <span id="resultado"></span> <!-- parte do resultado da expressao, o valor que aparece depois do = -->
+    </div> <!-- fim do visor da calculadora-->
+
+
+    <div class="separadores"><span class="numero">1</span><span class="numero">4</span><span class="numero">7</span> <span class="numero">C</span></div> <!-- exibicao da primeira coluna da calculadora -->
+
+    <div class="separadores"><span class="numero">2</span><span class="numero">5</span><span class="numero">8</span> <span class="numero">.</span></div> <!-- segunda coluna da calculadora -->
+
+    <div class="separadores"><span class="numero">3</span><span class="numero">6</span><span class="numero">9</span> <span class="numero">=</span></div> <!-- terceira coluna da calculadora -->
+
+    <div class="separadores"><span class="numero">+</span><span class="numero">-</span><span class="numero">/</span> <span class="numero">*</span></div> <!-- quarta coluna da calculadora -->
+  </div>
+
+</body>
+
+<script>
+  //codico javascript para efetuar os calculos
+  var expressao = '';
+  document.querySelectorAll('.numero').forEach(item => {
+
+// o seguinte codico é executado toda vez que um evento do tipo click for detectado
+    item.addEventListener('click', event => {
+
+// o switch captura o elemento innerHTML
+      switch (item.innerHTML) {
+
+
+        // caso o innerHTML for igual a =
+        case '=':
+        // adicionando a verificacao se o buffer da expressao é != de vazio, concerto do bug undefined
+        if(expressao != ''){
+          document.getElementById('expressao').innerHTML = document.getElementById('expressao').innerHTML + ' = '; // adiciona o valor de = no visor da calculadora
+          document.getElementById('resultado').innerHTML = eval(expressao); // a funcao eval efetua o calculo aritimetico contido na string expressao, para adicionar calculos novos é importante atualizar a string expressao
+          expressao = ''; // limpa o buffer da string expressao para liberar espaço para futuros calculos.
+        }
+          break;
+
+        // caso o innerHTML for igual a MC (funcao clear)
+        case 'C':
+          expressao = ''; // limpa o buffer da expressao
+          document.getElementById('expressao').innerHTML = expressao; // atualiza o campo expressao do visor
+          document.getElementById('resultado').innerHTML = ''; // atualiza o campo resultado do visor
+          break;
+
+//a seguir é o adicionamento dos operadores a calculadora, caso voce for adicionar novas expressoes, adicionar novos cases contendo os valores, é importante sempre comecar com um if(document.getElementById('expresssao').innerHTML != ' '); para evitar que sejam adicionados valores antes de qualquer valor, pois assim pode haver bugs inesperados
+// existe um bug que eu fiquei com raiva de mais para resolver, emq que é adicionado operadores apos o sinal de =
+
+// operador multiplicacao
+        case '*':
+          if(document.getElementById('expressao').innerHTML != ''){ // verifica se a expressao é diferente de vazio
+            expressao+= '*';  // caso a expressao for diferente de vazio, entao adiciona o valor do operador a string
+            document.getElementById('expressao').innerHTML += '*'; // por ultimo adiciona o operador ao visor expressao
+          }else{
+
+          }
+          break;
+// adicionando a posibilidade de calculos com decimais
+        case '.':
+          if (document.getElementById('expressao').innerHTML != '') { // verifica se a expressao é diferente de vazio
+            expressao+= '.';  // caso a expressao for diferente de vazio, entao adiciona o valor do operador a string
+            document.getElementById('expressao').innerHTML += '.'; // por ultimo adiciona o operador ao visor expressao
+          }
+          break;
+// adicionando o operador divisao
+        case '/':
+          if(document.getElementById('expressao').innerHTML != ''){ // verifica se a expressao é diferente de vazio
+            expressao+= '/';  // caso a expressao for diferente de vazio, entao adiciona o valor do operador a string
+            document.getElementById('expressao').innerHTML += '/'; // por ultimo adiciona o operador ao visor expressao
+          }
+        break;
+
+// adicionando o operador mais
+        case '+':
+          if (document.getElementById('expressao').innerHTML != '') { // verifica se a expressao é diferente de vazio
+            expressao+= '+';  // caso a expressao for diferente de vazio, entao adiciona o valor do operador a string
+            document.getElementById('expressao').innerHTML += '+'; // por ultimo adiciona o operador ao visor expressao
+          }
+          break;
+// adicionando o operador menos && adicionando calculo com numeros negativos
+          case '-':
+              // nesse caso, nao foi adicionado o verificador se a string expressaao é vazia, para posibilitar calculos com numeros negativos!
+              // porem é importante manter o document.getElementById('resultado') == ' ' para evitar que sejam adicionados valores apos o botao de igual ser pressionado ( bug resolvido )
+              if(document.getElementById('resultado').innerHTML == ''){
+
+              expressao+= '-';  // caso a expressao for diferente de vazio, entao adiciona o valor do operador a string
+              document.getElementById('expressao').innerHTML += '-'; // por ultimo adiciona o operador ao visor expressao
+            }
+            break;
+
+        // a funcao default nesse caso é ultilizada para adicionar qualquer valor que nao tenha sido usado no case, por exemplo, os numeros
+        default:
+          expressao += item.innerHTML;
+          document.getElementById('resultado').innerHTML = '';
+          document.getElementById('expressao').innerHTML = expressao;
+      }
+
+    });
+
+  });
+
+</script>
+
+</html>
